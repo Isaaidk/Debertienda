@@ -1,310 +1,111 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-float mora=0;
-float *puntero1 = &mora;
+#define MAX_PRODUCTS 10
+#define MAX_NAME_LENGTH 50
+#define MAX_DESCRIPTION_LENGTH 100
 
-float peras=0;
-float *puntero2 = &peras;
+typedef struct {
+    char name[MAX_NAME_LENGTH];
+    char description[MAX_DESCRIPTION_LENGTH];
+    float price;
+} Product;
 
-float uva=0;
-float *puntero3 = &uva;
-
-float naran=0;
-float *puntero4 = &naran;
-
-float kiwi=0;
-float *puntero5 = &kiwi;
-
-float n2, n3, n5,prM,prP,prU,prNA,prK;
-float n4;
-float suma=0;
-float *punterosum = &suma;
-
-float suma2=0;
-float *punterosum2= &suma2;
+void printProduct(const Product* product) {
+    printf("Nombre: %s\n", product->name);
+    printf("Descripción: %s\n", product->description);
+    printf("Precio: %.2f\n", product->price);
+    printf("\n");
+}
 
 int main() {
-
-
-
-
-    char opcion;
-
-
-
-
-
-
-
-
-
-
-
-
-
-    float n1 = 0;
-
-
-
+    Product* products[MAX_PRODUCTS];
+    int productCount = 0;
+    char choice;
 
     do {
-        printf("***BIENVENIDO A LOS ABARROTES DON JUAN****\n");
-
-        printf("***MENU****\n");
-
-        printf("1)  Productos \n");
-
-        printf("2) Eliminacion de productos  \n");
-
-        printf("3) Factura - fin del programa \n");
-
+        printf("1. Agregar producto\n");
+        printf("2. Editar producto\n");
+        printf("3. Mostrar productos\n");
+        printf("4. Salir\n");
+        printf("Ingrese su elección: ");
+        scanf(" %c", &choice);
         printf("\n");
 
-        scanf("%s", &opcion);
-
-        switch (opcion) {
-
+        switch (choice) {
             case '1':
+                if (productCount < MAX_PRODUCTS) {
+                    products[productCount] = (Product*)malloc(sizeof(Product));
 
-                do {
+                    printf("Ingrese el nombre del producto: ");
+                    scanf("%s", products[productCount]->name);
 
-                    printf("Escoja los productos que desea facturar: \n");
+                    printf("Ingrese la descripción del producto: ");
+                    scanf("%s", products[productCount]->description);
 
-                    printf("a) Mora (Precio: $1.15 libra )\n");
+                    printf("Ingrese el precio del producto: ");
+                    scanf("%f", &(products[productCount]->price));
 
-                    printf("b) Peras (Precio: $1.50 libra)\n");
-
-                    printf("c) Uvas (Precio: $2.00 libra )\n");
-
-                    printf("d) Naranjas (Precio: $1.10 libra)\n");
-
-                    printf("e) Kiwi (Precio: $1.20)\n");
-
-                    scanf("%s", &opcion);
-
-
-                    switch (opcion) {
-
-                        case 'a':
-
-                            printf("ingrese la cantidad de libras de mora; \n\n");
-
-                            scanf("%f", &mora);
-
-                            *puntero1= mora;
-
-                            break;
-
-                        case 'b':
-
-                            printf("Ingrese la cantidad de libras de pera: \n\n");
-
-                            scanf("%f", &peras);
-
-                            *puntero2= peras;
-
-                            break;
-
-                        case 'c':
-
-                            printf("Ingrese la cantidad de libras de uva: \n\n");
-
-                            scanf("%f", &uva);
-
-                            *puntero3= uva;
-
-                            break;
-
-                        case 'd':
-
-                            printf("Ingrese la cantidad de libras de naranjas: \n\n");
-
-                            scanf("%f", &naran);
-
-                            *puntero4= naran;
-
-                            break;
-
-                        case 'e':
-
-                            printf("Ingrese la cantidad de libras de kiwi : \n\n");
-
-                            scanf("%f", &kiwi);
-
-                            *puntero5= kiwi;
-
-                            break;
-
-                    }
-
-
-                    printf("Desea facturar otro producto (S/N):\n\n ");
-
-                    scanf(" %c", &opcion);
-
-                } while (opcion == 'S' || opcion == 's');
-
+                    productCount++;
+                    printf("Producto agregado correctamente.\n\n");
+                } else {
+                    printf("No se pueden agregar más productos.\n\n");
+                }
                 break;
 
             case '2':
+                if (productCount > 0) {
+                    int index;
+                    printf("Ingrese el índice del producto a editar (0-%d): ", productCount - 1);
+                    scanf("%d", &index);
+                    printf("\n");
 
-                printf("Escoja los productos que desea eliminar: \n");
+                    if (index >= 0 && index < productCount) {
+                        printf("Ingrese el nuevo nombre del producto: ");
+                        scanf("%s", products[index]->name);
 
-                printf("a) Mora %.0f \n",mora);
+                        printf("Ingrese la nueva descripción del producto: ");
+                        scanf("%s", products[index]->description);
 
-                printf("b) Peras %.0f\n",peras);
+                        printf("Ingrese el nuevo precio del producto: ");
+                        scanf("%f", &(products[index]->price));
 
-                printf("c) Uvas %.0f\n",uva);
-
-                printf("d) Naranjas %.0f \n",naran);
-
-                printf("e) Kiwi %.0f \n",kiwi);
-
-
-
-
-
-                    scanf("%s", &opcion);
-
-
-                    switch (opcion) {
-
-                        case 'a':
-
-                            printf(" Cuantas libras de mora desea eliminar; \n\n");
-
-
-                            scanf("%f", &n1);
-
-                            *puntero1= *puntero1 -n1;
-                            printf("Producto eliminado, total de libras de moras: %.0f\n\n",mora);
-
-                            break;
-
-                        case 'b':
-                            printf(" Cuantas libras de pera desea eliminar; \n\n");
-
-
-                            scanf("%f", &n2);
-
-                            *puntero2= *puntero2 -n2;
-
-                            printf("Producto eliminado, total de libras de peras: %.0f\n\n",peras);
-
-
-                            break;
-
-                        case 'c':
-
-                            printf(" Cuantas libras de uvas desea eliminar; \n\n");
-
-
-                            scanf("%f", &n3);
-
-                            *puntero3= *puntero3 -n3;
-                            printf("Producto eliminado, total de libras de uvas: %.0f\n\n",uva);
-
-
-                            break;
-
-
-                        case 'd':
-
-                            printf(" Cuantas libras de naranjas desea eliminar; \n\n");
-
-
-                            scanf("%f", &n4);
-
-                            *puntero4 = *puntero4 - n4;
-                            printf("Producto eliminado, total de libras de naranjas: %.0f\n\n",naran);
-
-                            break;
-
-                        case 'e':
-
-                            printf(" Cuantas libras de kiwi desea eliminar; \n\n");
-
-
-                            scanf("%f", &n5);
-
-                            *puntero5 = *puntero5 - n5;
-
-                            printf("Producto eliminado, total de libras de kiwis: %.0f\n\n",kiwi);
-                            break;
+                        printf("Producto editado correctamente.\n\n");
+                    } else {
+                        printf("Índice inválido.\n\n");
                     }
-
-
-
-
+                } else {
+                    printf("No hay productos para editar.\n\n");
+                }
                 break;
 
             case '3':
-                prM=mora*1.15;
-                prP=peras*1.50;
-                prU=uva*2.00;
-                prNA=naran*1.10;
-                prK=kiwi*1.20;
-                *punterosum = *puntero1 + *puntero2 + *puntero3 + *puntero4 + *puntero5;
-                *punterosum2= prM+prP+prU+prNA+prK;
+                if (productCount > 0) {
+                    printf("Lista de productos:\n\n");
+                    for (int i = 0; i < productCount; i++) {
+                        printf("Producto %d:\n", i);
+                        printProduct(products[i]);
+                    }
+                } else {
+                    printf("No hay productos para mostrar.\n\n");
+                }
+                break;
 
-
-
-
-                printf("********* Consumidor final *********\n\n");
-
-                printf("Producto                Precio              Cantidad        Total  \n\n");
-
-                printf("Mora                   $1.15 libra          :%.0f           :%.2f  \n\n",mora,prM);
-
-
-                printf("Peras                 $1.50 libra           :%.0f           :%.2f\n\n",peras,prP);
-
-                printf("Uvas                  $2.00 libra           :%.0f           :%.2f\n\n",uva,prU);
-
-                printf("Naranjas               $1.10 libra)         :%.0f           :%.2f \n\n",naran,prNA);
-
-                printf("Kiwi                   $1.20) libra         :%.0f           :%.2f\n\n",kiwi,prK);
-
-                printf("total                                       :%.0f           :%.2f\n\n",suma,suma2);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                printf("Fin programa \n\n");
-
-
-
-
+            case '4':
+                printf("Saliendo del programa...\n");
                 break;
 
             default:
-
-                printf("Opcion invalida \n");
-
-
+                printf("Opción inválida. Intente de nuevo.\n\n");
                 break;
-
         }
+    } while (choice != '4');
 
-
-    }while (opcion != '3');
-
-
-
-
-
-
+    // Liberar la memoria asignada a los productos
+    for (int i = 0; i < productCount; i++) {
+        free(products[i]);
+    }
 
     return 0;
 }
