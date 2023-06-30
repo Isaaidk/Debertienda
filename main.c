@@ -2,110 +2,112 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_PRODUCTS 10
-#define MAX_NAME_LENGTH 50
-#define MAX_DESCRIPTION_LENGTH 100
+#define MAX_PRODUCTOS 100
+#define MAX_NOMBRE 100
+#define MAX_DESCRIPCION 100
 
-typedef struct {
-    char name[MAX_NAME_LENGTH];
-    char description[MAX_DESCRIPTION_LENGTH];
-    float price;
-} Product;
-
-void printProduct(const Product* product) {
-    printf("Nombre: %s\n", product->name);
-    printf("Descripción: %s\n", product->description);
-    printf("Precio: %.2f\n", product->price);
-    printf("\n");
-}
+void ingresarProducto(char* nombres[], char* descripciones[], float* precios, int indice);
+void editarProducto(char* nombres[], char* descripciones[], float* precios, int indice);
+void mostrarProductos(char* nombres[], char* descripciones[], float* precios, int cantidad);
 
 int main() {
-    Product* products[MAX_PRODUCTS];
-    int productCount = 0;
-    char choice;
+    char* nombres[MAX_PRODUCTOS];
+    char* descripciones[MAX_PRODUCTOS];
+    float precios[MAX_PRODUCTOS];
+
+    int opcion, indice = 0;
 
     do {
-        printf("1. Agregar producto\n");
+        printf("------- Menu -------\n");
+        printf("1. Ingresar producto\n");
         printf("2. Editar producto\n");
         printf("3. Mostrar productos\n");
         printf("4. Salir\n");
-        printf("Ingrese su elección: ");
-        scanf(" %c", &choice);
-        printf("\n");
+        printf("Seleccione una opcion: ");
+        scanf("%d", &opcion);
 
-        switch (choice) {
-            case '1':
-                if (productCount < MAX_PRODUCTS) {
-                    products[productCount] = (Product*)malloc(sizeof(Product));
-
-                    printf("Ingrese el nombre del producto: ");
-                    scanf("%s", products[productCount]->name);
-
-                    printf("Ingrese la descripción del producto: ");
-                    scanf("%s", products[productCount]->description);
-
-                    printf("Ingrese el precio del producto: ");
-                    scanf("%f", &(products[productCount]->price));
-
-                    productCount++;
-                    printf("Producto agregado correctamente.\n\n");
+        switch (opcion) {
+            case 1:
+                ingresarProducto(nombres, descripciones, precios, indice);
+                indice++;
+                break;
+            case 2:
+                if (indice > 0) {
+                    int indiceEditar;
+                    printf("Ingrese el indice del producto a editar (0-%d): ", indice - 1);
+                    scanf("%d", &indiceEditar);
+                    editarProducto(nombres, descripciones, precios, indiceEditar);
                 } else {
-                    printf("No se pueden agregar más productos.\n\n");
+                    printf("No hay productos ingresados.\n");
                 }
                 break;
-
-            case '2':
-                if (productCount > 0) {
-                    int index;
-                    printf("Ingrese el índice del producto a editar (0-%d): ", productCount - 1);
-                    scanf("%d", &index);
-                    printf("\n");
-
-                    if (index >= 0 && index < productCount) {
-                        printf("Ingrese el nuevo nombre del producto: ");
-                        scanf("%s", products[index]->name);
-
-                        printf("Ingrese la nueva descripción del producto: ");
-                        scanf("%s", products[index]->description);
-
-                        printf("Ingrese el nuevo precio del producto: ");
-                        scanf("%f", &(products[index]->price));
-
-                        printf("Producto editado correctamente.\n\n");
-                    } else {
-                        printf("Índice inválido.\n\n");
-                    }
+            case 3:
+                if (indice > 0) {
+                    mostrarProductos(nombres, descripciones, precios, indice);
                 } else {
-                    printf("No hay productos para editar.\n\n");
+                    printf("No hay productos ingresados.\n");
                 }
                 break;
-
-            case '3':
-                if (productCount > 0) {
-                    printf("Lista de productos:\n\n");
-                    for (int i = 0; i < productCount; i++) {
-                        printf("Producto %d:\n", i);
-                        printProduct(products[i]);
-                    }
-                } else {
-                    printf("No hay productos para mostrar.\n\n");
-                }
-                break;
-
-            case '4':
+            case 4:
                 printf("Saliendo del programa...\n");
                 break;
-
             default:
-                printf("Opción inválida. Intente de nuevo.\n\n");
-                break;
+                printf("Opcion invalida. Intente nuevamente.\n");
         }
-    } while (choice != '4');
-
-    // Liberar la memoria asignada a los productos
-    for (int i = 0; i < productCount; i++) {
-        free(products[i]);
-    }
+    } while (opcion != 4);
 
     return 0;
+}
+
+void ingresarProducto(char* nombres[], char* descripciones[], float* precios, int indice) {
+    char nombre[MAX_NOMBRE];
+    char descripcion[MAX_DESCRIPCION];
+    float precio;
+
+    nombres[indice] = (char*)malloc(MAX_NOMBRE * sizeof(char));
+    descripciones[indice] = (char*)malloc(MAX_DESCRIPCION * sizeof(char));
+
+    printf("Ingrese el nombre del producto: ");
+    scanf(" %[^\n]", nombre);
+    strcpy(nombres[indice], nombre);
+
+    printf("Ingrese la descripcion del producto: ");
+    scanf(" %[^\n]", descripcion);
+    strcpy(descripciones[indice], descripcion);
+
+    printf("Ingrese el precio del producto: ");
+    scanf("%f", &precio);
+    precios[indice] = precio;
+
+    printf("Producto ingresado con exito.\n");
+}
+
+void editarProducto(char* nombres[], char* descripciones[], float* precios, int indice) {
+    char nombre[MAX_NOMBRE];
+    char descripcion[MAX_DESCRIPCION];
+    float precio;
+
+    printf("Ingrese el nuevo nombre del producto: ");
+    scanf(" %[^\n]", nombre);
+    strcpy(nombres[indice], nombre);
+
+    printf("Ingrese la nueva descripcion del producto: ");
+    scanf(" %[^\n]", descripcion);
+    strcpy(descripciones[indice], descripcion);
+
+    printf("Ingrese el nuevo precio del producto: ");
+    scanf("%f", &precio);
+    precios[indice] = precio;
+
+    printf("Producto editado con exito.\n");
+}
+
+void mostrarProductos(char* nombres[], char* descripciones[], float* precios, int cantidad) {
+    printf("------- Productos -------\n");
+    for (int i = 0; i < cantidad; i++) {
+        printf("------- Producto %d -------\n", i);
+        printf("Nombre: %s\n", nombres[i]);
+        printf("Descripcion: %s\n", descripciones[i]);
+        printf("Precio: %.2f\n", precios[i]);
+    }
 }
